@@ -1,0 +1,47 @@
+body {
+
+    background-image:url(/img/books-reading-books-background-with-books-bookshelf-besthqwallpapers.com-1024x768.jpg);
+    background-size: cover;
+}
+
+
+#navbarSupportedContent{  
+    justify-content: end;   
+}
+
+.container {
+margin-top: 10vh;
+backdrop-filter: blur(8px);
+color: brown;
+border-color: black;
+background-color: rgba(41, 39, 39, 0.932);
+border-radius: 15px;
+width: 39%;
+
+
+}
+.btn-danger {
+    
+    color: black;
+    background-color: brown;
+    border-color: brown;
+    border-bottom: brown;    
+}
+.btn-edit {
+    color: black;
+    background-color: rgb(127, 219, 255);
+    border-color: aquamarine;  
+}
+
+
+.datos {
+    color: antiquewhite;
+}
+.num{
+    color: antiquewhite;
+}
+
+td {
+color: antiquewhite;
+}
+

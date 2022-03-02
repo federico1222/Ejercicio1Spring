@@ -1,0 +1,87 @@
+body {
+    background-image: url(/img/varad-parulekar-Gls5DB9lk6s-unsplash.jpg);
+    backdrop-filter: url(/img/varad-parulekar-Gls5DB9lk6s-unsplash.jpg);
+    backdrop-filter: blur(5px);
+    background-size: cover;
+}
+
+/* seccion 1 Home  */
+#Home {
+    width: 100%;
+    height: 80vh;
+}
+#button {
+   background-color: rgb(127, 219, 255);
+   border-color: aquamarine;
+}
+
+.tituloPrincipal {
+    margin-left: 40px;
+    margin-top: 130px;
+    
+    color: white;
+}
+
+h1 {
+    font-size: 3.1rem;
+
+}
+
+p {
+    color: black;
+    font-size: 1.1rem;
+    line-height: 20px;
+}
+
+span {
+    color: brown;
+}
+
+#header {
+    margin:0 auto;
+}
+
+/* end seccion 1 Home  */
+
+.section-info{
+    background-color: white;
+    padding: 50px;
+
+}
+
+h3 {
+    font-size: 3rem;
+    
+}
+
+.divaider {
+    border-top: 5px solid brown;
+    width: 75%;
+}
+
+.p {
+    font-family: 'Montserrat', sans-serif;
+    font-size:  1.2rem;
+    line-height: 33px;
+    margin: 10px;
+    padding: 10px;
+    text-align:start;  
+}
+
+.section-info{
+    border-radius: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(41, 39, 39, 0.932)
+}
+
+.car-img{
+    width: 300px;
+    height: 300px;
+}
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+body {
+    background-image: url(/img/wallpaperbetter.com_1440x900.jpg); 
+}
+#navbarSupportedContent{  
+    justify-content: end;   
+}
+
+.btn-primary {
+    color: black;
+    background-color: rgb(127, 219, 255);
+    border-color: aquamarine;
+}
+
+
+#button {
+    margin-top: 12rem!important;
+    width: 67%;
+}
+
+
+
+
