@@ -3,7 +3,6 @@ package com.ejercicio_1.servicios;
 import com.ejercicio_1.entidades.Autor;
 import com.ejercicio_1.errores.ErroresDeServicios;
 import com.ejercicio_1.repositorios.AutorRepositorio;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -94,11 +93,13 @@ public class AutorService {
             throw new ErroresDeServicios("Autor no encontrado");
         }
     }
+    
     @Transactional(rollbackOn = Exception.class)
     public Autor buscarPorNombre(String nombre) throws ErroresDeServicios{
      
         return autorRepositorio.buscarAutorPorNombre(nombre);
     }
+    
     public void validar(Autor autor) throws ErroresDeServicios{
         
         if (autor.getNombre().isEmpty()) {

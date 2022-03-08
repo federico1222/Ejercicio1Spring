@@ -4,20 +4,18 @@ import com.ejercicio_1.entidades.Autor;
 import com.ejercicio_1.entidades.Editorial;
 import com.ejercicio_1.entidades.Libro;
 import com.ejercicio_1.errores.ErroresDeServicios;
-import com.ejercicio_1.servicios.AutorService;
-import com.ejercicio_1.servicios.EditorialService;
+import com.ejercicio_1.repositorios.AutorRepositorio;
+import com.ejercicio_1.repositorios.EditorialRepositorio;
 import com.ejercicio_1.servicios.LibroService;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -25,40 +23,64 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LibroControlador {
 
     private LibroService libroServicio;
-    private AutorService autorServicio;
-    private EditorialService editorialServicio;
+    private AutorRepositorio autorRepositorio;
+    private EditorialRepositorio editorialRespositorio;
 
     @Autowired
     public LibroControlador(LibroService libroServicio,
-        AutorService autorService,
-        EditorialService editorialService) {
+            AutorRepositorio autorRepositorio,
+            EditorialRepositorio editorialRespositorio) {
         this.libroServicio = libroServicio;
-        this.autorServicio = autorServicio;
-        this.editorialServicio = editorialServicio;
+        this.autorRepositorio = autorRepositorio;
+        this.editorialRespositorio = editorialRespositorio;
     }
 
+    
     //registrar
     @GetMapping("/nuevoLibro")
     public String nuevoLibro(ModelMap model) {
 
-        model.addAttribute("titulo", "Nuevo Libro");
+        model.addAttribute("Titulo", "Nuevo Libro");
         model.addAttribute("descripcion", "Cargue aqui los datos del Libro");
-        model.addAttribute("libro", new Libro());
+
+        //Autor
+        List<Autor> autores = autorRepositorio.findAll();
+        model.addAttribute("autores", autores);
+        //Editorial
+        List<Editorial> editoriales = editorialRespositorio.findAll();
+        model.addAttribute("editoriales", editoriales);
+
         return "libro/nuevoLibro.html";
     }
 
+    
     @PostMapping("/registrarLibro")
-    public String registrarLibro(@ModelAttribute Libro libro,
-            RedirectAttributes attr){
-
+    public String registrarLibro(
+            @RequestParam (required = false) long isbn,
+            @RequestParam (required = false) String titulo,
+            @RequestParam (required = false) Integer anio,
+            @RequestParam (required = false) Integer ejemplares,
+            @RequestParam (required = false) Integer ejemplaresPrestados,
+            @RequestParam (required = false) Integer ejemplaresRestantes,
+            @RequestParam (required = false) String idAutor,
+            @RequestParam (required = false) String idEditorial,
+            RedirectAttributes attr) {
         try {
-            libroServicio.guardarLibro(libro);      
+            
+            libroServicio.guardarLibro(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes, idAutor, idEditorial);
         } catch (ErroresDeServicios ex) {
             attr.addFlashAttribute("error", ex.getMessage());
-            attr.addFlashAttribute("libro", libro);
+            attr.addFlashAttribute("isbn", isbn);
+            attr.addFlashAttribute("titulo", titulo);
+            attr.addFlashAttribute("anio", anio);
+            attr.addFlashAttribute("ejemplares", ejemplares);
+            attr.addFlashAttribute("ejemplaresPrestados", ejemplaresPrestados);
+            attr.addFlashAttribute("ejemplaresRestantes", ejemplaresRestantes);
+            attr.addFlashAttribute("idAutor", idAutor);
+            attr.addFlashAttribute("idEditorial", idEditorial);
             return "redirect:/libro/nuevoLibro";
         }
-        
+
         return "libro/nuevoLibroCargado";
     }
 
@@ -68,13 +90,21 @@ public class LibroControlador {
 
         Libro libro = libroServicio.buscarPorId(id);
 
-        model.addAttribute("titulo", "Actualizar Libro");
+        model.addAttribute("Titulo", "Actualizar Libro");
         model.addAttribute("descripcion", "Cargue aqui los datos nuevos del Libro");
         model.addAttribute("libro", libro);
+
+        //Autor
+        List<Autor> autores = autorRepositorio.findAll();
+        model.addAttribute("autores", autores);
+        //Editorial
+        List<Editorial> editoriales = editorialRespositorio.findAll();
+        model.addAttribute("editoriales", editoriales);
 
         return "libro/nuevoLibro.html";
     }
 
+    
     //eliminar
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable String id) throws ErroresDeServicios {
@@ -84,6 +114,7 @@ public class LibroControlador {
         return "redirect:/libro/listarLibro";
     }
 
+    
     //listar
     @GetMapping("/listarLibro")
     public String listarLibro(ModelMap model) {

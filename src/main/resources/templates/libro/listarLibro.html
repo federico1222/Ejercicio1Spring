@@ -63,8 +63,8 @@
             <td th:text="${libro.ejemplaresPrestados}"></td>
             <td th:text="${libro.ejemplaresRestantes}"></td>
             <td th:text="${libro.alta}"></td>
-            <td th:text="${autor}"></td>
-            <td th:text="${editorial}"></td>
+            <td th:text="${libro.autor.nombre}"></td>
+            <td th:text="${libro.editorial.nombre}"></td>
             <td>
               <div class="btn-group-vertical" aria-label="Basic example">               
                 <a th:href="@{/libro/editar/}+${libro.id}" class="btn btn-edit">Editar</a>

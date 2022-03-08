@@ -1,6 +1,7 @@
 package com.ejercicio_1.servicios;
 
-
+import com.ejercicio_1.entidades.Autor;
+import com.ejercicio_1.entidades.Editorial;
 import com.ejercicio_1.entidades.Libro;
 import com.ejercicio_1.errores.ErroresDeServicios;
 import com.ejercicio_1.repositorios.LibroRepositorio;
@@ -33,26 +34,39 @@ public class LibroService {
     }
 
     @Transactional(rollbackOn = Exception.class) //Si el metodo se ejecuta sin lanzar excepciones se hace un comit a la base de datos y se aplican todos los cambios
-    public void guardarLibro(Libro libro) throws ErroresDeServicios {
+    public void guardarLibro(long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, String idAutor, String idEditorial) throws ErroresDeServicios {
         
-        validar(libro);
-        
+        Autor autor = AutorService.buscarPorId(idAutor);
+        Editorial editorial = EditorialService.buscarPorId(idEditorial);
+
+        validar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes, autor, editorial);
+
+        Libro libro = new Libro();
+        libro.setIsbn(isbn);
+        libro.setTitulo(titulo);
+        libro.setAnio(anio);
+        libro.setEjemplares(ejemplares);
+        libro.setEjemplaresPrestados(ejemplaresPrestados);
+        libro.setEjemplaresRestantes(ejemplaresRestantes);
+        libro.setAlta(true);
+        libro.setAutor(autor);
+        libro.setEditorial(editorial);
+
         libroRepositorio.save(libro);
     }
-    
-    @Transactional(rollbackOn = Exception.class)
-    public void modificarLibro( String id) throws ErroresDeServicios {
 
-        Optional<Libro> respuesta = libroRepositorio.findById(id);
-
-        if (respuesta.isPresent()) {
-            Libro libro = respuesta.get();
-            libroRepositorio.save(libro);
-        } else {
-            throw new ErroresDeServicios("No se encontro ningun libro con este id");
-        }
-    }
-
+//    @Transactional(rollbackOn = Exception.class)
+//    public void modificarLibro( String id) throws ErroresDeServicios {
+//
+//        Optional<Libro> respuesta = libroRepositorio.findById(id);
+//
+//        if (respuesta.isPresent()) {
+//            Libro libro = respuesta.get();
+//            libroRepositorio.save(libro);
+//        } else {
+//            throw new ErroresDeServicios("No se encontro ningun libro con este id");
+//        }
+//    }
     @Transactional(rollbackOn = Exception.class)
     public void altaLibro(String id) throws ErroresDeServicios {
 
@@ -68,7 +82,7 @@ public class LibroService {
         }
     }
 
-     @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackOn = Exception.class)
     public void bajaLibro(String id) throws ErroresDeServicios {
 
         //validamos que el libro exista
@@ -84,7 +98,7 @@ public class LibroService {
 
     }
 
-     @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackOn = Exception.class)
     public void eliminarlibro(String id) throws ErroresDeServicios {
         Optional<Libro> respuesta = libroRepositorio.findById(id);
 
@@ -96,47 +110,53 @@ public class LibroService {
             throw new ErroresDeServicios("No se encontro ningun libro con este id");
         }
     }
-    
-       @Transactional(rollbackOn = Exception.class)
-    public Libro buscarPorId(String id) throws ErroresDeServicios{
+
+    @Transactional(rollbackOn = Exception.class)
+    public Libro buscarPorId(String id) throws ErroresDeServicios {
         Optional<Libro> option = libroRepositorio.findById(id);
         if (option.isPresent()) {
             Libro libro = option.get();
             return libro;
-        }else{
+        } else {
             throw new ErroresDeServicios("Libro no encontrado");
         }
     }
-    
-    @Transactional(rollbackOn = Exception.class) 
-    public List<Libro> listarLibro (){
-        
-        return libroRepositorio.findAll();       
+
+    @Transactional(rollbackOn = Exception.class)
+    public List<Libro> listarLibro() {
+
+        return libroRepositorio.findAll();
     }
 
     //validaciones
-    public void validar(Libro libro) throws ErroresDeServicios {
+    public void validar(long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Autor autor, Editorial editorial) throws ErroresDeServicios {
 
-        if (libro.getIsbn()<1) {
+        if (isbn < 1) {
             throw new ErroresDeServicios("ISBN incorrecto, Ingrese uno nuevamnete");
         }
-        if (libro.getTitulo()== null || libro.getTitulo().isEmpty()) {
+        if (titulo == null || titulo.isEmpty()) {
             throw new ErroresDeServicios("El titulo no puede estar vacio");
         }
-        if (libroRepositorio.buscarLibroPorNombre(libro.getTitulo()) != null) {
+        if (libroRepositorio.buscarLibroPorNombre(titulo) != null) {
             throw new ErroresDeServicios("ya existe un libro con este titulo");
         }
-        if (libro.getAnio() == null) {
+        if (anio == null || anio.equals("")) {
             throw new ErroresDeServicios("Ingrese un año correspondiente");
         }
-        if (libro.getEjemplares() == null) {
-            throw new ErroresDeServicios("Ingrese un numero de ejemplares");
+        if (ejemplares == null || ejemplares.equals("")) {
+            throw new ErroresDeServicios("Ingrese el numero de ejemplares");
         }
-        if (libro.getEjemplaresPrestados()>libro.getEjemplares()) {
-            throw new ErroresDeServicios("El numero de ejemplares prestados no puede ser mayor que el numero de ejemplares");
+        if (ejemplaresPrestados== null || ejemplaresPrestados.equals("")) {
+            throw new ErroresDeServicios("Ingrese el numero de ejemplares prestados");
         }
-        if (libro.getEjemplaresRestantes()> libro.getEjemplaresPrestados()) {
-            throw new ErroresDeServicios("El numero de ejemplares restantes no puede ser mayor que el numero de ejemplares prestados");
+        if (ejemplaresRestantes==null || ejemplaresRestantes.equals("")) {
+            throw new ErroresDeServicios("Ingrese el numero de ejemplares restantes");
+        }
+        if (autor == null) {
+            throw new ErroresDeServicios(("autor ingresado null"));
+        }
+        if (editorial == null) {
+            throw new ErroresDeServicios(("editorial ingresado null"));
         }
     }
 

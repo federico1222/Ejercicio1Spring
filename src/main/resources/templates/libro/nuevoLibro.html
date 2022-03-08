@@ -42,52 +42,54 @@
             <div class="form-holder animate__animated animate__fadeInLeft">
                 <div class="form-content">
                     <div class="form-items">
-                      <h3 th:text="${titulo}"></h3>
+                      <h3 th:text="${Titulo}"></h3>
                       <p th:text="${descripcion}"></p>
-                        <form class="requires-validation"  th:action="@{/libro/registrarLibro}" th:object="${libro}"  method='post' novalidate>
+                        <form class="requires-validation"  th:action="@{/libro/registrarLibro}" method='post' novalidate>
 
                           <div class="col-md-12">
-                            <input class="form-control" type="hidden" th:field="*{id}" name="id" placeholder="id" required>
+                            <input class="form-control" type="hidden" th:value="${id}" name="id" placeholder="id" required>
                          </div>
 
                             <div class="col-md-12">
-                               <input class="form-control" type="text" th:field="*{isbn}" name="isbn" placeholder="isbn" required>
+                               <input class="form-control" type="text" th:value="${isbn}" name="isbn" placeholder="isbn" required>
                             </div>
 
                             <div class="col-md-12">
-                                <input class="form-control" type="text" th:field="*{titulo}" name="titulo" placeholder="Titulo del Libro" required>
+                                <input class="form-control" type="text" th:value="${titulo}" name="titulo" placeholder="Titulo del Libro" required>
                             </div>
 
                             <div class="col-md-12">
-                              <input class="form-control" type="text" th:field="*{anio}" name="anio" placeholder="Año" required>
+                              <input class="form-control" type="text" th:value="${anio}" name="anio" placeholder="Año" required>
                           </div>
 
                           <div class="col-md-12">
-                            <input class="form-control" type="text" th:field="*{ejemplares}" name="ejemplares" placeholder="Ejemplares" required>
+                            <input class="form-control" type="text" th:value="${ejemplares}" name="ejemplares" placeholder="Ejemplares" required>
                              
                         </div>
 
                         <div class="col-md-12">
-                          <input class="form-control" type="text" th:field="*{ejemplaresPrestados}" name="ejemplaresPrestados" placeholder="Ejemplares Prestados" required>
+                          <input class="form-control" type="text" th:value="${ejemplaresPrestados}" name="ejemplaresPrestados" placeholder="Ejemplares Prestados" required>
                          
                       </div>
 
                       <div class="col-md-12">
-                        <input class="form-control" type="text" th:field="*{ejemplaresRestantes}" name="ejemplaresRestantes" placeholder="Ejemplares Restantes" required>                        
+                        <input class="form-control" type="text" th:value="${ejemplaresRestantes}" name="ejemplaresRestantes" placeholder="Ejemplares Restantes" required>                        
                     </div>
-                    <div class="col-md-12">
-                      <input class="form-control" type="text" th:field="*{alta}" name="alta" placeholder="alta" required>                        
-                  </div>
 
                     <div class="col-md-12">
-                      <input class="form-control" type="text"  th:field="*{autor}" name="autor" placeholder="Ingrese el nombre del Autor" required>                      
-                  </div>
+                      <select class="form-select" name="idAutor" aria-label="Default select example">
+                        <option>Autor</option>
+                        <option th:each="autor:${autores}" th:value="${autor.id}" th:text="${autor.nombre}"></option>                      
+                      </select>
+                    </div>
 
-                           <div class="col-md-12">
-                              <input class="form-control" type="text" th:field="*{editorial}" name="editorial" placeholder="Ingrese el nombre de la Editorial" required>                             
-                           </div>  
-                           <p class="error" style="color: red;" th:text="${error != null ? error : ''}"></p>
-                              
+                    <div class="col-md-12">
+                      <select class="form-select" name="idEditorial" aria-label="Default select example">
+                        <option selected>Editorial</option>
+                        <option th:each="editorial:${editoriales}" th:value="${editorial.id}" th:text="${editorial.nombre}"></option> 
+                      </select>
+                      </div>                      
+                      <p class="error" style="color: red;" th:text="${error != null ? error : ''}"></p>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
                           <label class="form-check-label">Confirmo que todos los datos son correctos</label>
